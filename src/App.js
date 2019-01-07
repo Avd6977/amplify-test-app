@@ -1,6 +1,10 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Amplify from "aws-amplify";
+import { withAuthenticator } from "aws-amplify-react";
+import React, { Component } from "react";
+import "./App.css";
+import aws_exports from "./aws-exports";
+import logo from "./logo.svg";
+Amplify.configure(aws_exports);
 
 class App extends Component {
   render() {
@@ -25,4 +29,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withAuthenticator(App, true);
