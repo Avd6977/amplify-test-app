@@ -91,7 +91,7 @@
 				"TemplateURL": "https://s3.amazonaws.com/amplifytestapp-20190107092907-deployment/amplify-cfn-templates/auth/cognitoea7ffd0d-cloudformation-template.yml",
 				"Parameters": {
 					"identityPoolName": "cognitoea7ffd0d_identitypool_ea7ffd0d",
-					"allowUnauthenticatedIdentities": false,
+					"allowUnauthenticatedIdentities": true,
 					"thirdPartyAuth": false,
 					"lambdaLogPolicy": "cognitoea7ffd0d_lambda_log_policy",
 					"openIdLambdaRoleName": "cognitoea7ffd0d_openid_lambda_role",
@@ -132,6 +132,57 @@
 					"authRoleArn": "arn:aws:iam::512826829863:role/amplifytestapp-20190107092907-authRole",
 					"resourceName": "cognitoea7ffd0d",
 					"authSelections": "identityPoolAndUserPool"
+				}
+			}
+		},
+		"storagedynamo3391a3ce": {
+			"Type": "AWS::CloudFormation::Stack",
+			"Properties": {
+				"TemplateURL": "https://s3.amazonaws.com/amplifytestapp-20190107092907-deployment/amplify-cfn-templates/storage/dynamo3391a3ce-cloudformation-template.json",
+				"Parameters": {
+					"tableName": "dynamo3391a3ce",
+					"partitionKeyName": "id",
+					"partitionKeyType": "S"
+				}
+			}
+		},
+		"functionamplifytestappfef6bb86": {
+			"Type": "AWS::CloudFormation::Stack",
+			"Properties": {
+				"TemplateURL": "https://s3.amazonaws.com/amplifytestapp-20190107092907-deployment/amplify-cfn-templates/function/amplifytestappfef6bb86-cloudformation-template.json",
+				"Parameters": {
+					"storagedynamo3391a3ceName": {
+						"Fn::GetAtt": [
+							"storagedynamo3391a3ce",
+							"Outputs.Name"
+						]
+					},
+					"storagedynamo3391a3ceArn": {
+						"Fn::GetAtt": [
+							"storagedynamo3391a3ce",
+							"Outputs.Arn"
+						]
+					}
+				}
+			}
+		},
+		"apimyapi": {
+			"Type": "AWS::CloudFormation::Stack",
+			"Properties": {
+				"TemplateURL": "https://s3.amazonaws.com/amplifytestapp-20190107092907-deployment/amplify-cfn-templates/api/myapi-cloudformation-template.json",
+				"Parameters": {
+					"functionamplifytestappfef6bb86Name": {
+						"Fn::GetAtt": [
+							"functionamplifytestappfef6bb86",
+							"Outputs.Name"
+						]
+					},
+					"functionamplifytestappfef6bb86Arn": {
+						"Fn::GetAtt": [
+							"functionamplifytestappfef6bb86",
+							"Outputs.Arn"
+						]
+					}
 				}
 			}
 		}
